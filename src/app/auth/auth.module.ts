@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { MaterialModule } from '../material/material.module';
 
 import { AuthRoutingModule } from './auth-routing.module';
 
@@ -9,6 +10,6 @@ import { LayoutComponent } from './layouts';
 
 @NgModule({
   declarations: [LayoutComponent, LoginPageComponent, RegisterPageComponent],
-  imports: [AuthRoutingModule, CommonModule],
+  imports: [AuthRoutingModule, MaterialModule],
 })
 export class AuthModule {}

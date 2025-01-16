@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, resource } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Hero } from '../../interfaces';
+import { HeroesService } from '../../services/heroes.service';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'heroes-search-hero-page',
@@ -7,4 +11,32 @@ import { Component } from '@angular/core';
   templateUrl: './search-hero-page.component.html',
   styles: ``,
 })
-export class SearchHeroPageComponent {}
+export class SearchHeroPageComponent {
+  private heroesService = inject(HeroesService);
+  selectedHero?: Hero;
+  heroes: Hero[]|undefined = [];
+
+  searchInput = new FormControl('');
+
+  searchHero(): void {
+    const value: string = this.searchInput.value || '';
+
+    this.heroesService.getSuggestions(value).subscribe(
+      heroes => this.heroes = heroes
+    );
+  }
+
+  onSelectedOption(event: MatAutocompleteSelectedEvent): void {
+    if (!event.option.value) {
+      this.selectedHero = undefined;
+
+      return;
+    }
+
+    const hero: Hero = event.option.value as Hero;
+
+    this.searchInput.setValue(hero.superhero);
+
+    this.selectedHero = hero;
+  }
+}
